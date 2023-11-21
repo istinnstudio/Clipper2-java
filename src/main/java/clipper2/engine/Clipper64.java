@@ -58,12 +58,6 @@ public class Clipper64 extends ClipperBase {
 	 * polygons (to any level of nesting). And given that PolyTree64 and PolyTreeD
 	 * preserve these parent-child relationships, these two PolyTree classes will be
 	 * very useful to some users.
-	 *
-	 * @param clipType
-	 * @param fillRule
-	 * @param solutionClosed
-	 * @param solutionOpen
-	 * @return
 	 */
 	public final boolean Execute(ClipType clipType, FillRule fillRule, Paths64 solutionClosed, Paths64 solutionOpen) {
 		solutionClosed.clear();
@@ -75,7 +69,7 @@ public class Clipper64 extends ClipperBase {
 			succeeded = false;
 		}
 
-		ClearSolution();
+		ClearSolutionOnly();
 		return succeeded;
 	}
 
@@ -94,7 +88,7 @@ public class Clipper64 extends ClipperBase {
 			succeeded = false;
 		}
 
-		ClearSolution();
+		ClearSolutionOnly();
 		return succeeded;
 	}
 

@@ -28,4 +28,13 @@ public class Paths64 extends ArrayList<Path64> {
 		super(Arrays.asList(paths));
 	}
 
+	@Override
+	public String toString() {
+		String s = "";
+		for (Path64 p : this) {
+			s = s + p.toString() + "\n";
+		}
+		return s;
+	}
+
 }
