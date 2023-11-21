@@ -25,6 +25,7 @@ import java.util.List;
 import clipper2.core.RectD;//mod122.1
 import clipper2.engine.ClipperD;//mod122.1
 import clipper2.core.PathsD;//mod122.1
+
 /**
  * Geometric offsetting refers to the process of creating parallel curves that
  * are offset a specified distance from their primary curves.
@@ -205,6 +206,7 @@ public class ClipperOffset {
 			this.delta = delta;
 			this.mitLimSqr = (getMiterLimit() <= 1 ? 2.0 : 2.0 / Clipper.Sqr(getMiterLimit()));
 
+
 			for (Group group : groupList) {
 				DoGroupOffset(group);
 			}
@@ -233,6 +235,19 @@ public class ClipperOffset {
 			}
                   
        		// clean up self-intersections ...
+
+			for (Group group : groupList) {
+				DoGroupOffset(group);
+			}
+		}
+	}
+
+	public final void Execute(double delta, Paths64 solution) {
+		solution.clear();
+		ExecuteInternal(delta);
+
+		// clean up self-intersections ...
+
 		Clipper64 c = new Clipper64();
 		c.setPreserveCollinear(getPreserveCollinear());
 		c.setReverseSolution(getReverseSolution() != groupList.get(0).pathsReversed);
@@ -241,6 +256,7 @@ public class ClipperOffset {
 			c.Execute(ClipType.Union, FillRule.Negative, solution);
 		} else {
 			c.Execute(ClipType.Union, FillRule.Positive, solution);
+
 		}           
                   
 		}
@@ -262,6 +278,10 @@ public class ClipperOffset {
 			c.Execute(ClipType.Union, FillRule.Negative, solution);
 		} else {
 			c.Execute(ClipType.Union, FillRule.Positive, solution);
+		}
+	}
+
+
 		}
 	}
 
@@ -411,6 +431,7 @@ public class ClipperOffset {
 					rec.right = pt.x;
 				} else if (pt.x < rec.left) {
 					rec.left = pt.y;
+
 				}
 			}
 		}
@@ -452,9 +473,8 @@ public class ClipperOffset {
 			for (PointD pt : paths.get(i)) {
 				if (pt.y < lp.y || (pt.y == lp.y && pt.x >= lp.x)) {
 					continue;
+
 				}
-				result = i;
-				lp = pt;
 			}
 		}
 		return result;
@@ -465,7 +485,9 @@ public class ClipperOffset {
       
       
       
-      
+
+	}
+
 	private static PointD TranslatePoint(PointD pt, double dx, double dy) {
 		return new PointD(pt.x + dx, pt.y + dy);
 	}
@@ -533,6 +555,7 @@ public class ClipperOffset {
       //mod122.1
 	private PointD GetPerpendicD(PointD pt, PointD norm) {
 		return new PointD(pt.x + norm.x * groupDelta, pt.y + norm.y * groupDelta);
+
 	}
 
 	private PointD GetPerpendicD(Point64 pt, PointD norm) {
@@ -706,6 +729,7 @@ public class ClipperOffset {
 		} else if (joinType == JoinType.Miter) {
 			// miter unless the angle is so acute the miter would exceeds ML
 			if (cosA > mitLimSqr - 1) {
+
 				DoMiter(group, path, j, k.argValue, cosA);
 			} else {
 				DoSquare(group, path, j, k.argValue);
@@ -753,6 +777,7 @@ public class ClipperOffset {
 		} else if (joinType == JoinType.Miter) {
 			// miter unless the angle is so acute the miter would exceeds ML
 			if (cosA > mitLimSqr - 1) {
+
 				DoMiter(group, path, j, k.argValue, cosA);
 			} else {
 				DoSquare(group, path, j, k.argValue);
@@ -862,6 +887,7 @@ private void OffsetOpenPath(Group group, PathD path) {
 		group.outPathD = new PathD();
 		int highI = path.size() - 1;
 
+
 		// do the line start cap
 		switch (this.endType) {
 			case Butt :
@@ -912,6 +938,7 @@ private void OffsetOpenPath(Group group, PathD path) {
 
 		group.outPaths.add(group.outPath);
 	}
+
 	private void DoGroupOffset(Group group) {
 		if (group.endType == EndType.Polygon) {
 			// the lowermost polygon must be an outer polygon. So we can use that as the
@@ -996,6 +1023,7 @@ private void OffsetOpenPath(Group group, PathD path) {
 		solution.addAll(group.outPaths);
 		group.outPaths.clear();
 	}
+
 	private void DoGroupOffsetD(Group group) {
 		if (group.endType == EndType.Polygon) {
 			// the lowermost polygon must be an outer polygon. So we can use that as the
@@ -1046,6 +1074,7 @@ private void OffsetOpenPath(Group group, PathD path) {
 			if ((cnt == 0) || ((cnt < 3) && (this.endType == EndType.Polygon))) {
 				continue;
 			}
+
 
 			if (cnt == 1) {
 				group.outPathD = new PathD();

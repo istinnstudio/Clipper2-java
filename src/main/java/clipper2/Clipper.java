@@ -266,6 +266,7 @@ public final class Clipper {
 		RectClip rc = new RectClip(r);
 		tmpPath = rc.Execute(tmpPath, convexOnly);
 		return ScalePathsD(tmpPath, 1 / scale);
+
 	}
 
 	public static PathsD ExecuteRectClip(RectD rect, PathD path) {
@@ -677,7 +678,9 @@ public final class Clipper {
 	}
 
 	public static Rect64 GetBounds(Path64 path) {
-		Rect64 result = InvalidRect64;
+
+		Rect64 result = InvalidRect64.clone();
+
 		for (Point64 pt : path) {
 			if (pt.x < result.left) {
 				result.left = pt.x;
@@ -696,7 +699,9 @@ public final class Clipper {
 	}
 
 	public static Rect64 GetBounds(Paths64 paths) {
-		Rect64 result = InvalidRect64;
+
+		Rect64 result = InvalidRect64.clone();
+
 		for (Path64 path : paths) {
 			for (Point64 pt : path) {
 				if (pt.x < result.left) {
