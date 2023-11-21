@@ -266,6 +266,7 @@ public final class Clipper {
 		RectClip rc = new RectClip(r);
 		tmpPath = rc.Execute(tmpPath, convexOnly);
 		return ScalePathsD(tmpPath, 1 / scale);
+
 	}
 
 	public static PathsD ExecuteRectClip(RectD rect, PathD path) {
@@ -677,7 +678,9 @@ public final class Clipper {
 	}
 
 	public static Rect64 GetBounds(Path64 path) {
+
 		Rect64 result = InvalidRect64.clone();
+
 		for (Point64 pt : path) {
 			if (pt.x < result.left) {
 				result.left = pt.x;
@@ -696,7 +699,9 @@ public final class Clipper {
 	}
 
 	public static Rect64 GetBounds(Paths64 paths) {
+
 		Rect64 result = InvalidRect64.clone();
+
 		for (Path64 path : paths) {
 			for (Point64 pt : path) {
 				if (pt.x < result.left) {
@@ -833,6 +838,27 @@ public final class Clipper {
 		return result;
 	}
 
+      //mod122.1
+      	public static PathD StripDuplicates(PathD path, boolean isClosedPath) {
+		int cnt = path.size();
+		PathD result = new PathD(cnt);
+		if (cnt == 0) {
+			return result;
+		}
+		PointD lastPt = path.get(0);
+		result.add(lastPt);
+		for (int i = 1; i < cnt; i++) {
+			if (!path.get(i).equals(lastPt)) {
+				lastPt = path.get(i);
+				result.add(lastPt);
+			}
+		}
+		if (isClosedPath && result.get(0).equals(lastPt)) {
+			result.remove(result.size() - 1);
+		}
+		return result;
+	}      
+     //mod122.1 end 
 	private static void AddPolyNodeToPaths(PolyPath64 polyPath, Paths64 paths) {
 		if (!polyPath.getPolygon().isEmpty()) {
 			paths.add(polyPath.getPolygon());
