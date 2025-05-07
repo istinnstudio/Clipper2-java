@@ -18,7 +18,8 @@ public final class Point64 {
 
 	public Point64() {
 	}
-
+      
+//mod122.1
 	public Point64(Point64 pt) {
 		this.x = pt.x;
 		this.y = pt.y;
@@ -28,7 +29,8 @@ public final class Point64 {
 		this.x = x;
 		this.y = y;
 	}
-
+//mod122.1 end
+      
 	public Point64(double x, double y) {
 		this.x = (long) Math.rint(x);
 		this.y = (long) Math.rint(y);
